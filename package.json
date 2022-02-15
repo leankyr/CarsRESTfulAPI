@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "console": "^0.7.2",
+    "express": "^4.17.2",
+    "knex": "^1.0.3",
+    "pg": "^8.7.3"
+  },
+  "name": "carsapi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
