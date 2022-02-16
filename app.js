@@ -26,6 +26,15 @@ app.get('/cars', (req, res) => {
 
 })
 
+app.get('/cars/:carid', (req, res) => {
+
+    knex.select().from('cars').where('car_id',req.params['carid'] ).then(function(data){
+        res.send({cars: data})
+    })
+
+})
+
+
 app.post('/cars', (req, res) => {
 
     console.log(req.body)
