@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express')
 const {request} = require("express");
 const Console = require("console");
@@ -9,19 +10,18 @@ const knex = require('knex')({
     client: 'pg',
     version: '12.9',
     connection: {
-        host : '127.0.0.1',
-        port : 5432,
-        user : 'leankyr',
-        password : 'lalala',
-        database : 'CarsDB'
+        host : process.env.HOST,
+        port : process.env.PORT,
+        user : process.env.USER,
+        password : process.env.PASS,
+        database : process.env.DB
     }
 });
-
 
 app.get('/cars', (req, res) => {
 
     knex.select().from('cars').then(function(data){
-        res.send({data: data})
+        res.send({cars: data})
     })
 
 })
