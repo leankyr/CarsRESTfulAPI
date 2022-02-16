@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express')
 const {request} = require("express");
-
+const Joi = require('joi');
 const app = express()
 const port = 3000
 app.use(express.json());
@@ -40,6 +40,32 @@ app.post('/cars', (req, res) => {
     })
 
 })
+
+app.post('/drivers', (req, res) => {
+    let ts = new Date();
+    const schema = Joi.object().keys({
+        first_name: Joi.string().alphanum().min(3).max(30).required(),
+        last_name: Joi.string().alphanum().min(3).max(30).required(),
+        car_id: Joi.number().integer().min(0)
+    });
+
+    const result = schema.validate(req.body)
+    console.log(result.error)
+    if(result.error == null) {
+        knex('drivers').insert({
+            first_name: req.body['first_name'],
+            last_name: req.body['last_name'],
+            created_on: ts.toISOString(),
+            car_id: req.body['car_id']
+        }).then(function (result) {
+            res.json({success: true, message: 'Data Posted Successfully'});     // respond back to request
+        })
+    } else {
+        res.status(400)
+        res.send(result.error.details)
+    }
+})
+
 
 app.get('/cars/:carid', (req, res) => {
 
