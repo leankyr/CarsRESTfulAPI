@@ -64,6 +64,7 @@ app.post('/drivers', (req, res) => {
     });
 
     const result = schema.validate(req.body)
+    console.log(result.value.success)
     console.log(result.error)
     if(result.error == null) {
         knex('drivers').insert({
