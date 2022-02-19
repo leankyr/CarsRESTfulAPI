@@ -38,7 +38,7 @@ app.post('/cars', (req, res) => {
     let ts = new Date();
     const schema = Joi.object().keys({
         plate: Joi.string().alphanum().min(7).max(7).required(),
-        color: Joi.string().alphanum().min(2).max(30).required(),
+        color: Joi.string().min(2).max(30).required(),
     });
     const result = schema.validate(req.body)
     if(result.error == null) {
@@ -80,10 +80,10 @@ app.post('/drivers', (req, res) => {
     }
 })
 
-app.get('/cars/:carid', (req, res) => {
+app.get('/cars/:car_id', (req, res) => {
 
     knex.select().from('cars').where('car_id',
-        req.params['carid']).then(function(data){
+        req.params['car_id']).then(function(data){
         res.send({car: data})
     })
 
@@ -98,15 +98,15 @@ app.get('/drivers/:driver_id', (req, res) => {
 
 })
 
-app.put('/cars/:carid', (req, res) => {
+app.put('/cars/:car_id', (req, res) => {
 
     const schema = Joi.object().keys({
         plate: Joi.string().alphanum().min(7).max(7).required(),
-        color: Joi.string().alphanum().min(2).max(30).required(),
+        color: Joi.string().min(2).max(30).required(),
     });
     const result = schema.validate(req.body)
     if(result.error == null) {
-        knex('cars').where({car_id: req.params['carid']}).update({
+        knex('cars').where({car_id: req.params['car_id']}).update({
             plate: req.body['plate'],
             color: req.body['color'],
         }).then(function (result) {
@@ -144,10 +144,10 @@ app.put('/drivers/:driver_id', (req, res) => {
 
 })
 
-app.delete('/cars/:carid', (req, res) => {
+app.delete('/cars/:car_id', (req, res) => {
 
-    knex('cars').where('car_id', req.params['carid']).del().then(function(data){
-        res.send('Car with id=' + req.params['carid'].toString() + ' deleted successfully')
+    knex('cars').where('car_id', req.params['car_id']).del().then(function(data){
+        res.send('Car with id=' + req.params['car_id'].toString() + ' deleted successfully')
     })
 })
 
