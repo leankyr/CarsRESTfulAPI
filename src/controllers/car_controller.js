@@ -1,6 +1,5 @@
-const Joi = require('joi');
 const knex = require('../configs/knex/knex')
-
+const schemas = require('../configs/schemas')
 
 async function getCars(req, res) {
 
@@ -11,11 +10,8 @@ async function getCars(req, res) {
 
 async function postCars(req, res) {
 
-    const schema = Joi.object().keys({
-        plate: Joi.string().alphanum().min(7).max(7).required(),
-        color: Joi.string().min(2).max(30).required(),
-    });
-    const {error, value} = schema.validate(req.body)
+
+    const {error, value} = schemas.car_schema.validate(req.body)
     if(error === undefined) {
         const query = knex('cars').insert({
             plate: value.plate,
@@ -41,11 +37,7 @@ async function getCarsById(req, res) {
 
 async function updateCarById(req, res) {
 
-    const schema = Joi.object().keys({
-        plate: Joi.string().alphanum().min(7).max(7).required(),
-        color: Joi.string().min(2).max(30).required(),
-    });
-    const {error, value} = schema.validate(req.body)
+    const {error, value} = schemas.car_schema.validate(req.body)
     if(error === undefined) {
         const query = knex('cars').where({car_id: req.params['car_id']}).update({
             plate: value.plate,

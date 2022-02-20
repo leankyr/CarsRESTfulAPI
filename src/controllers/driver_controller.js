@@ -1,6 +1,5 @@
-const Joi = require('joi');
 const knex = require('../configs/knex/knex')
-
+const schemas = require('../configs/schemas')
 
 async function getDrivers(req, res) {
 
@@ -19,12 +18,7 @@ async function getDriversById(req, res) {
 
 async function postDrivers(req, res) {
 
-    const schema = Joi.object().keys({
-        first_name: Joi.string().alphanum().min(3).max(30).required(),
-        last_name: Joi.string().alphanum().min(3).max(30).required(),
-        car_id: Joi.number().integer().min(0)
-    });
-    const {error, value} = schema.validate(req.body)
+    const {error, value} = schemas.driver_schema.validate(req.body)
     if(error === undefined) {
         const query = knex('drivers').insert({
             first_name: value.first_name,
@@ -43,12 +37,7 @@ async function postDrivers(req, res) {
 
 async function updateDriverById(req, res) {
 
-    const schema = Joi.object().keys({
-        first_name: Joi.string().alphanum().min(3).max(30).required(),
-        last_name: Joi.string().alphanum().min(3).max(30).required(),
-        car_id: Joi.number().integer().min(0)
-    });
-    const {error, value} = schema.validate(req.body)
+    const {error, value} = schemas.driver_schema.validate(req.body)
     if(error === undefined) {
         const query = knex('drivers').where({driver_id: req.params['driver_id']}).update({
             first_name: value.first_name,
