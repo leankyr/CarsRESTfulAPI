@@ -1,5 +1,5 @@
 // Update with your config settings.
-
+const path = require('path');
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
@@ -16,10 +16,10 @@ module.exports = {
       database: process.env.DB
     },
     migrations: {
-      directory: __dirname + '/knex/migrations',
+      directory: path.join(__dirname, '/knex/migrations')
     },
     seeds: {
-      directory: __dirname + '/knex/seeds'
+      directory: path.join(__dirname, '/knex/seeds')
     }
 
   }
