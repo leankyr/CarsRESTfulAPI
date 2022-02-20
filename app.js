@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express')
-const {request} = require("express");
+// const {request} = require("express");
 const Joi = require('joi');
 const app = express()
 const port = 3000
@@ -102,17 +102,17 @@ app.put('/cars/:car_id', (req, res) => {
         plate: Joi.string().alphanum().min(7).max(7).required(),
         color: Joi.string().min(2).max(30).required(),
     });
-    const result = schema.validate(req.body)
-    if(result.error == null) {
+    const {error, value} = schema.validate(req.body)
+    if(error === undefined) {
         knex('cars').where({car_id: req.params['car_id']}).update({
-            plate: req.body['plate'],
-            color: req.body['color'],
+            plate: value.plate,
+            color: value.color,
         }).then(function (result) {
             res.json({success: true, message: 'Data updated Successfully'});     // respond back to request
         })
     } else {
         res.status(400)
-        res.send(result.error.details)
+        res.send(error.details)
     }
 
 })
@@ -125,13 +125,12 @@ app.put('/drivers/:driver_id', (req, res) => {
         car_id: Joi.number().integer().min(0)
     });
 
-    const result = schema.validate(req.body)
-    console.log(result.error)
-    if(result.error == null) {
+    const {error, value} = schema.validate(req.body)
+    if(error === undefined) {
         knex('drivers').where({driver_id: req.params['driver_id']}).update({
-            first_name: req.body['first_name'],
-            last_name: req.body['last_name'],
-            car_id: req.body['car_id']
+            first_name: value.first_name,
+            last_name: value.last_name,
+            car_id: value.car_id
         }).then(function (result) {
             res.json({success: true, message: 'Data Updated Successfully'});     // respond back to request
         })
