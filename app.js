@@ -35,42 +35,39 @@ app.get('/drivers', (req, res) => {
 })
 
 app.post('/cars', (req, res) => {
-    let ts = new Date();
     const schema = Joi.object().keys({
         plate: Joi.string().alphanum().min(7).max(7).required(),
         color: Joi.string().min(2).max(30).required(),
     });
-    const result = schema.validate(req.body)
-    if(result.error == null) {
+    const {error, value} = schema.validate(req.body)
+    if(error === undefined) {
         knex('cars').insert({
-            plate: req.body['plate'],
-            color: req.body['color'],
-            created_on: ts.toISOString()
+            plate: value.plate,
+            color: value.color,
+            created_on: new Date().toISOString()
         }).then(function (result) {
             res.json({success: true, message: 'Data Posted Successfully'});     // respond back to request
         })
     } else {
         res.status(400)
-        res.send(result.error.details)
+        res.send(error.details)
     }
 })
 
 app.post('/drivers', (req, res) => {
-    let ts = new Date();
+
     const schema = Joi.object().keys({
         first_name: Joi.string().alphanum().min(3).max(30).required(),
         last_name: Joi.string().alphanum().min(3).max(30).required(),
         car_id: Joi.number().integer().min(0)
     });
 
-    const result = schema.validate(req.body)
-    console.log(result.value.success)
-    console.log(result.error)
-    if(result.error == null) {
+    const {error, value} = schema.validate(req.body)
+    if(error === undefined) {
         knex('drivers').insert({
-            first_name: req.body['first_name'],
-            last_name: req.body['last_name'],
-            created_on: ts.toISOString(),
+            first_name: value.first_name,
+            last_name: value.last_name,
+            created_on: new Date().toISOString(),
             car_id: req.body['car_id']
         }).then(function (result) {
             res.json({success: true, message: 'Data Posted Successfully'});     // respond back to request
