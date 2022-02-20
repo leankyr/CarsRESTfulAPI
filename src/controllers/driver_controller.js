@@ -1,5 +1,6 @@
 const knex = require('../configs/knex/knex')
 const schemas = require('../configs/schemas')
+const log = require('../logger')
 
 async function getDrivers(req, res) {
 
@@ -30,6 +31,7 @@ async function postDrivers(req, res) {
         res.json({success: true, message: 'Data Posted Successfully'});
 
     } else {
+        log.log.error('Post Drivers: Error while processing the input')
         res.status(400)
         res.send(error.details)
     }
@@ -48,6 +50,7 @@ async function updateDriverById(req, res) {
         res.json({success: true, message: 'Drivers Updated Successfully'});
 
     } else {
+        log.log.error('Update Drivers By Id: Error while processing the input')
         res.status(400)
         res.send(error.details)
     }
