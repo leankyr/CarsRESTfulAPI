@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  node_backend:
+    container_name: node_backend
+    image: leankyr/node-app:latest
+    ports:
+      - '3000:80'
+    environment:
+      - USER=leankyr
+      - PASS=lalala
+      - DB=CarsDB
+      - HOST=127.0.0.1
+      - PORT=5431
+      - EXTERNAL_PORT=3000
+    depends_on:
+      - db
+  db:
+    container_name: db
+    image: 'bitnami/postgresql:12.9.0'
+    ports:
+      - '5431:5432'
+    environment:
+      - 'ALLOW_EMPTY_PASSWORD=yes'
+#      - POSTGRESQL_USERNAME=leankyr
+#      - POSTGRESQL_PASSWORD=lalala
+#      - POSTGRESQL_DATABASE=CarsDB
+    volumes:
+      - pgdata1:/var/lib/postgresql/data
+
+volumes:
+  pgdata1: {}
