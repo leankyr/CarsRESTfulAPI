@@ -15,8 +15,8 @@ async function postCars (req, res) {
     if (error === undefined) {
         const query = knex('cars').insert({
             plate: value.plate,
-            color: value.color,
-            created_on: new Date().toISOString()
+            color: value.color
+            // created_on: new Date().toISOString()
         }); // respond back to request
         await query;
         res.json({ success: true, message: 'Data Posted Successfully' });

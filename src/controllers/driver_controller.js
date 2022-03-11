@@ -21,7 +21,7 @@ async function postDrivers (req, res) {
         const query = knex('drivers').insert({
             first_name: value.first_name,
             last_name: value.last_name,
-            created_on: new Date().toISOString(),
+            // created_on: new Date().toISOString(),
             car_id: req.body.car_id
         }); // respond back to request
         await query;
