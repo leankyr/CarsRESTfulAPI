@@ -28,7 +28,7 @@ services:
       - APP_DB_NAME=CarsDB
     volumes:
       - pgdata1:/var/lib/postgresql/data
-      - ./src/configs/knex/migrations:/docker-entrypoint-initdb.d/
+      - ./src/database/migrations:/docker-entrypoint-initdb.d/
 
 volumes:
   pgdata1: {}
