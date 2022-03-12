@@ -30,8 +30,7 @@ async function postDrivers (req, res) {
 async function updateDriverById (req, res) {
     const { error, value } = schemas.driverSchema.validate(req.body);
     if (error === undefined) {
-        const query = driver_repo.updateDriverById(req.params.driver_id, value) // respond back to request
-        await query;
+        await driver_repo.updateDriverById(req.params.driver_id, value) // respond back to request
         res.json({ success: true, message: 'Drivers Updated Successfully' });
     } else {
         log.log.error('Update Drivers By Id: Error while processing the input');
