@@ -1,12 +1,16 @@
 const knex = require('../configs/knex/knex');
 const schemas = require('../configs/schemas');
 const log = require('../logger');
+const tomorrow = require('../third_party/tomorrow_io')
 
 async function getCars (req, res) {
     log.log.debug('Get Cars Called');
     const query = knex.select().from('cars');
     const data = await query;
-    res.send({ cars: data });
+    const locationMunich = [48.1351, 11.5820];
+    const weatherMunich = await tomorrow.getLocationWeather(locationMunich)
+    res.send({ cars: data,
+                weatherMunich: weatherMunich});
 }
 
 async function postCars (req, res) {
