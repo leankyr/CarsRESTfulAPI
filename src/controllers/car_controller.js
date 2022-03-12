@@ -1,28 +1,24 @@
-const knex = require('../configs/knex/knex');
 const schemas = require('../configs/schemas');
 const log = require('../logger');
-const tomorrow = require('../third_party/tomorrow_io')
+const tomorrow = require('../third_party/tomorrow_io');
+const car_repo = require('../repositories/car_repository');
 
 async function getCars (req, res) {
     log.log.debug('Get Cars Called');
-    const query = knex.select().from('cars');
+    const query = car_repo.getCars();
     const data = await query;
-    const locationMunich = [48.1351, 11.5820];
-    const weatherMunich = await tomorrow.getLocationWeather(locationMunich)
-    res.send({ cars: data,
-                weatherMunich: weatherMunich});
+    // const locationMunich = [48.1351, 11.5820];
+    // const weatherMunich = await tomorrow.getLocationWeather(locationMunich)
+    res.send({ cars: data
+              //  weatherMunich: weatherMunich
+          });
 }
 
 async function postCars (req, res) {
     log.log.debug('Post Cars Called');
     const { error, value } = schemas.carSchema.validate(req.body);
     if (error === undefined) {
-        const query = knex('cars').insert({
-            plate: value.plate,
-            color: value.color
-            // created_on: new Date().toISOString()
-        }); // respond back to request
-        await query;
+        await car_repo.postCars(value);
         res.json({ success: true, message: 'Data Posted Successfully' });
     } else {
         log.log.error('Post Cars: Error while processing the input');
@@ -33,8 +29,7 @@ async function postCars (req, res) {
 
 async function getCarsById (req, res) {
     log.log.debug('Get CarsById called');
-    const query = knex.select().from('cars').where('car_id',
-        req.params.car_id);
+    const query = car_repo.getCarsById(req.params.car_id);
     const data = await query;
     res.send({ car: data });
 }
@@ -43,11 +38,7 @@ async function updateCarById (req, res) {
     log.log.debug('Update CarsById called');
     const { error, value } = schemas.carSchema.validate(req.body);
     if (error === undefined) {
-        const query = knex('cars').where({ car_id: req.params.car_id }).update({
-            plate: value.plate,
-            color: value.color
-        }); // respond back to request
-        await query;
+        await car_repo.UpdateCarById(req.params.car_id, value) // respond back to request
         res.json({ success: true, message: 'Cars Updated Successfully' });
     } else {
         log.log.error('Update Car By Id: Error while processing the input');
@@ -58,8 +49,7 @@ async function updateCarById (req, res) {
 
 async function deleteCarById (req, res) {
     log.log.debug('Delete CarsById called');
-    const query = knex('cars').where('car_id', req.params.car_id).del();
-    await query;
+    await car_repo.deleteCarById(req.params.car_id)
     res.send('Car with id=' + req.params.car_id.toString() + ' deleted successfully');
 }
 
