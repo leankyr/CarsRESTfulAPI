@@ -1,5 +1,5 @@
-const schemas = require('../configs/schemas');
-const log = require('../logger');
+const schemas = require('./schemas');
+const log = require('../utils/logger');
 const tomorrow = require('../third_party/tomorrow_io');
 const car_repo = require('../repositories/car_repository');
 
@@ -7,10 +7,10 @@ async function getCars (req, res) {
     log.log.debug('Get Cars Called');
     const query = car_repo.getCars();
     const data = await query;
-    // const locationMunich = [48.1351, 11.5820];
-    // const weatherMunich = await tomorrow.getLocationWeather(locationMunich)
-    res.send({ cars: data
-              //  weatherMunich: weatherMunich
+    const locationMunich = [48.1351, 11.5820];
+    const weatherMunich = await tomorrow.getLocationWeather(locationMunich)
+    res.send({ cars: data,
+              weatherMunich: weatherMunich
           });
 }
 

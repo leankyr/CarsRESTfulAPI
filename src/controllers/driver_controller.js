@@ -1,6 +1,6 @@
-const schemas = require('../configs/schemas');
+const schemas = require('./schemas');
 const driver_repo = require('../repositories/driver_repository');
-const log = require('../logger');
+const log = require('../utils/logger');
 const car_repo = require("../repositories/car_repository");
 
 async function getDrivers (req, res) {

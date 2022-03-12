@@ -1,7 +1,7 @@
 const queryString = require('query-string');
 const moment = require('moment');
 const {default: axios} = require("axios");
-const log = require('../logger');
+const log = require('../utils/logger');
 
 // pick the location, as a latlong pair
 function getLocationWeather(location) {
