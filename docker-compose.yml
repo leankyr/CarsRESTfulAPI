@@ -11,7 +11,7 @@ services:
       - PASS=lalala
       - DB=CarsDB
       - HOST=db
-      - PORT=5432
+      - DB_PORT=5432
     depends_on:
       - db
   db:
