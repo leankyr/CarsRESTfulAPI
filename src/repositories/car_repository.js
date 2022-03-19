@@ -6,13 +6,13 @@ function getCars(){
 }
 
 async function postCars(value){
-  const query = knex('cars').insert({
+  return knex('cars').insert({
         plate: value.plate,
         color: value.color
         // created_on: new Date().toISOString()
-    });
-    await query;
-    return null;
+    }).returning('*');
+
+
 }
 
 function getCarsById(car_id){
@@ -25,15 +25,14 @@ async function UpdateCarById(car_id, value){
     const query = knex('cars').where({ car_id: car_id }).update({
         plate: value.plate,
         color: value.color
-    });
+    }).returning('*');
     await query;
-    return null;
+    return query;
 }
 
 async function deleteCarById(car_id){
-    const query = knex('cars').where('car_id', car_id).del();
-    await query;
-    return null;
+    return knex('cars').where('car_id', car_id).del().returning('*');
+
 }
 
 module.exports = {

@@ -18,8 +18,14 @@ async function getDriversById (req, res) {
 async function postDrivers (req, res) {
     const { error, value } = schemas.driverSchema.validate(req.body);
     if (error === undefined) {
-        await driver_repo.postDrivers(value);
-        res.json({ success: true, message: 'Data Posted Successfully' });
+        try {
+            const data = await driver_repo.postDrivers(value);
+            res.status(201);
+            res.json({success: true, message: 'Data Posted Successfully', data: data});
+        } catch (error){
+            res.status(400);
+            res.send('Foreign key does not exist in table cars');
+        }
     } else {
         log.log.error('Post Drivers: Error while processing the input');
         res.status(400);
@@ -30,8 +36,8 @@ async function postDrivers (req, res) {
 async function updateDriverById (req, res) {
     const { error, value } = schemas.driverSchema.validate(req.body);
     if (error === undefined) {
-        await driver_repo.updateDriverById(req.params.driver_id, value) // respond back to request
-        res.json({ success: true, message: 'Drivers Updated Successfully' });
+        const data = await driver_repo.updateDriverById(req.params.driver_id, value) // respond back to request
+        res.json({ success: true, message: 'Drivers Updated Successfully', data: data});
     } else {
         log.log.error('Update Drivers By Id: Error while processing the input');
         res.status(400);
@@ -40,8 +46,10 @@ async function updateDriverById (req, res) {
 }
 
 async function deleteDriverById (req, res) {
-    await driver_repo.deleteDriverById(req.params.driver_id)
-    res.send('Driver with id=' + req.params.driver_id.toString() + ' deleted successfully');
+    const data = await driver_repo.deleteDriverById(req.params.driver_id)
+    res.send({
+        msg: 'Driver with id=' + req.params.driver_id.toString() + ' deleted successfully',
+        data: data});
 }
 
 module.exports = {

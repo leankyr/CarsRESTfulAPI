@@ -4,7 +4,7 @@ const path = require('path');
  * @type {string|string}
  */
 
-const dbSocketPath = process.env.DB_SOCKET_PATH || '/cloudsql';
+// const dbSocketPath = process.env.DB_SOCKET_PATH || '/cloudsql';
 
 module.exports = {
 
@@ -12,12 +12,12 @@ module.exports = {
         client: 'pg',
         version: '12.8',
         connection: {
-            // host: process.env.HOST,
-            // port: process.env.DB_PORT,
+            host: process.env.HOST,
+            port: process.env.DB_PORT,
             user: process.env.USER,
             password: process.env.PASS,
             database: process.env.DB,
-            host: `${dbSocketPath}/${process.env.INSTANCE_CONNECTION_NAME}`,
+            // host: `${dbSocketPath}/${process.env.INSTANCE_CONNECTION_NAME}`,
 
         },
         migrations: {

@@ -5,14 +5,12 @@ function getDrivers(){
 }
 
 async function postDrivers(value){
-    const query = knex('drivers').insert({
+    return knex('drivers').insert({
         first_name: value.first_name,
         last_name: value.last_name,
         // created_on: new Date().toISOString(),
         car_id: value.car_id
-    });
-    await query;
-    return null;
+    }).returning('*');
 }
 
 function getDriverById(driver_id){
@@ -26,15 +24,14 @@ async function updateDriverById(driver_id, value){
         first_name: value.first_name,
         last_name: value.last_name,
         car_id: value.car_id
-    });
+    }).returning('*');
     await query;
-    return null;
+    return query;
 }
 
 async function deleteDriverById(driver_id){
-    const query = knex('drivers').where('driver_id', driver_id).del();
-    await query;
-    return null;
+    return knex('drivers').where('driver_id', driver_id).del().returning('*');
+
 }
 
 module.exports = {
