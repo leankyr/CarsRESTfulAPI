@@ -1,8 +1,7 @@
 
 
 function health (req, res){
-    res.send({ success: 'Container is up'
-    });
+    res.send({ success: 'Container is up'});
 }
 
 module.exports = {

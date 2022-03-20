@@ -23,7 +23,7 @@ async function postCars (req, res) {
             res.json({ success: true, message: 'Data Posted Successfully', data: data});
         } catch (error){
             res.status(400);
-            res.send('car with this plate already exists!');
+            res.send({msg: 'car with this plate already exists!'});
         }
     }else {
         log.log.error('Post Cars: Error while processing the input');
