@@ -156,7 +156,7 @@ describe('/GET Drivers', () => {
 });
 
 describe('/POST Drivers', () => {
-    it('it should return status 201',  async() => {
+    it('it should return status 201',  async(done) => {
         const car = {
             plate: 'drv0000',
             color: 'testDriver'
@@ -167,7 +167,7 @@ describe('/POST Drivers', () => {
         // It passed the test even though it should not (change driver last name to color)
         const driver = {
             first_name: 'George',
-            color:  'Kyriazis',
+            last_name:  'Kyriazis',
             car_id: car_id[0]["car_id"]
         };
         chai.request(process.env.SERVER)
@@ -178,6 +178,7 @@ describe('/POST Drivers', () => {
                 res.body.should.be.a('object');
                 res.body.should.have.property('success');
                 res.body.should.have.property('data');
+                done();
             });
     });
 });
