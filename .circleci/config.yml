@@ -1,7 +1,7 @@
 jobs:
   build_and_deploy:
     docker:
-      - image: 'cimg/base:stable'
+      - image: 'eu.gcr.io/cars-restful-api/node-app'
     steps:
       - checkout
       - cloudrun/init
@@ -10,7 +10,7 @@ jobs:
       - cloudrun/deploy:
           image: 'gcr.io/${GOOGLE_PROJECT_ID}/test-${CIRCLE_SHA1}'
           platform: managed
-          region: us-east1
+          region: eu-west3
           service-name: example-service
           unauthenticated: true
       - run:
