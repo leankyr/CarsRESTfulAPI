@@ -157,8 +157,9 @@ describe('cars', function () {
 });
 
 describe('drivers', function () {
-
-
+    beforeEach(async () => {
+        await knex.raw('TRUNCATE cars, drivers CASCADE;');
+    });
     describe('/GET Drivers', () => {
         it('it should return status 200', (done) => {
             chai.request(process.env.SERVER)
