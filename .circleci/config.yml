@@ -7,9 +7,6 @@ jobs:
       - checkout
       - run:
           command: |
-            npm init
-      - run:
-          command: |
             npm install
       - run:
           command: |
