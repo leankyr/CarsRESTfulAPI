@@ -7,21 +7,20 @@ jobs:
       - run:
           name: Check Node.js version
           command: node -v
-      - run:
-          name: Install dependencies
-          command: npm install
-      - run:
-          name: Run tests
-          command: npm test
-      - run:
-          name: Lint
-          command: npx eslint src/**
+#      - run:
+#          name: Install dependencies
+#          command: npm install
+#      - run:
+#          name: Run tests
+#          command: npm test
+#      - run:
+#          name: Lint
+#          command: npx eslint src/**
       - persist_to_workspace:
           root: .
           paths:
             - build
             - package.json
-            - yarn.lock
             - app.yaml
   deploy:
     docker:
