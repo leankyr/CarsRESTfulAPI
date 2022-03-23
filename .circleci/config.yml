@@ -16,20 +16,20 @@ jobs:
 #            npm test
   build_push_image_cloud_run_mangaged:
     docker:
-      - image: circleci/python:3.7.4
+      - image: eu.gcr.io/cars-restful-api/node-app:latest
     steps:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: false
-#      - run:
-#          name: Build app binary and Docker image
-#          command: |
-#            echo 'export PATH=~$PATH:~/.local/bin' >> $BASH_ENV
-#            echo ${GCP_PROJECT_KEY} | base64 --decode --ignore-garbage > $HOME/CarsAPI/sa-private-key.json
-#            echo 'export GOOGLE_CLOUD_KEYS=$(cat $HOME/CarsAPI/sa-private-key.json)' >> $BASH_ENV
-#            echo 'export TAG=${CIRCLE_SHA1}' >> $BASH_ENV
-#            echo 'export IMAGE_NAME=$CIRCLE_PROJECT_REPONAME' >> $BASH_ENV && source $BASH_ENV
-#            docker build -t eu.gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME -t us.gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME:$TAG .
+      - run:
+          name: Build app binary and Docker image
+          command: |
+            echo 'export PATH=~$PATH:~/.local/bin' >> $BASH_ENV
+            echo ${GCP_PROJECT_KEY} | base64 --decode --ignore-garbage > $HOME/CarsAPI/sa-private-key.json
+            echo 'export GOOGLE_CLOUD_KEYS=$(cat $HOME/CarsAPI/sa-private-key.json)' >> $BASH_ENV
+            echo 'export TAG=${CIRCLE_SHA1}' >> $BASH_ENV
+            echo 'export IMAGE_NAME=$CIRCLE_PROJECT_REPONAME' >> $BASH_ENV && source $BASH_ENV
+            docker build -t eu.gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME -t us.gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME:$TAG .
       - gcp-gcr/gcr-auth:
           gcloud-service-key: GOOGLE_CLOUD_KEYS
           google-project-id: GOOGLE_PROJECT_ID
