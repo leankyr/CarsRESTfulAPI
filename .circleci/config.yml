@@ -11,9 +11,9 @@ jobs:
       - run:
           command: |
             npm install
-      - run:
-          command: |
-            npm test
+#      - run:
+#          command: |
+#            npm test
   build_push_image_cloud_run_mangaged:
     docker:
       - image: circleci/python:3.7.4
