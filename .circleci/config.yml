@@ -1,53 +1,16 @@
-version: 2.1
+version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:16.13.2
     steps:
+      - checkout
       - run:
-          name: Check Node.js version
-          command: node -v
-#      - run:
-#          name: Install dependencies
-#          command: npm install
-#      - run:
-#          name: Run tests
-#          command: npm test
-#      - run:
-#          name: Lint
-#          command: npx eslint src/**
-      - persist_to_workspace:
-          root: .
-          paths:
-            - package.json
-  deploy:
-    docker:
-      - image: google/cloud-sdk
-    steps:
-      - attach_workspace:
-          at: .
-      - run:
-          name: ls
-          command: ls -al
-      - run:
-          name: Setup gcloud env
           command: |
-            echo $GCP_KEY > sa-private-key.json
-            gcloud auth activate-service-account --key-file=sa-private-key.json
-            gcloud --quiet config set project ${GCP_PROJECT_ID}
-            gcloud --quiet config set compute/zone ${GCP_REGION}
+            npm init
       - run:
-          name: Deploy to App Engine
-          command: gcloud app deploy
-
-workflows:
-  version: 2
-  build-deploy:
-    jobs:
-      - build
-      - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
+          command: |
+            npm install
+      - run:
+          command: |
+            npm test
