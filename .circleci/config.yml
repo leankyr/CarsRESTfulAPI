@@ -1,39 +1,55 @@
+version: 2.1
+orbs:
+  gcp-gcr: circleci/gcp-gcr@0.6.1
+  cloudrun: circleci/gcp-cloud-run@1.0.0
 jobs:
-  build_and_deploy:
+  build_test:
     docker:
-      - image: 'eu.gcr.io/cars-restful-api/node-app:latest'
+      - image: eu.gcr.io/cars-restful-api/node-app:latest
     steps:
       - checkout
-      - cloudrun/init
-      - cloudrun/build:
-          tag: 'gcr.io/${GOOGLE_PROJECT_ID}/test-${CIRCLE_SHA1}'
-      - cloudrun/deploy:
-          image: 'gcr.io/${GOOGLE_PROJECT_ID}/test-${CIRCLE_SHA1}'
-          platform: managed
-          region: us-east1
-          service-name: example-service
-          unauthenticated: true
       - run:
-          command: >
-            # A simple example of how a deployed managed service could be
-            verified or further tested.
-
-            # This step will send request our "API" and fail if there is
-            unexpected output.
-
-            GCP_API_RESULTS=$(curl -s "$GCP_DEPLOY_ENDPOINT")
-
-            if [ "$GCP_API_RESULTS" != "Hello World!" ]; then
-              echo "Result is unexpected"
-              echo 'Result: '
-              curl -s "$GCP_DEPLOY_ENDPOINT"
-              exit 1;
-            fi
-          name: Test managed deployed service.
-orbs:
-  cloudrun: circleci/gcp-cloud-run@1.0.0
-version: 2.1
+          name: Install Dependencies
+          command: |
+            npm install
+      - run:
+          name: Run Tests
+          command: |
+            npm test
+  build_push_image_cloud_run_mangaged:
+    docker:
+      - image: eu.gcr.io/cars-restful-api/node-app:latest
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: false
+      - run:
+          name: Build app binary and Docker image
+          command: |
+            echo 'export PATH=~$PATH:~/.local/bin' >> $BASH_ENV
+            echo ${GCP_PROJECT_KEY} | base64 --decode --ignore-garbage > $HOME/CarsAPI/sa-private-key.json
+            echo 'export GOOGLE_CLOUD_KEYS=$(cat $HOME/CarsAPI/sa-private-key.json)' >> $BASH_ENV
+            echo 'export TAG=${CIRCLE_SHA1}' >> $BASH_ENV
+            echo 'export IMAGE_NAME=$CIRCLE_PROJECT_REPONAME' >> $BASH_ENV && source $BASH_ENV
+            docker build -t eu.gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME -t eu.gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME:$TAG .
+      - gcp-gcr/gcr-auth:
+          gcloud-service-key: GOOGLE_CLOUD_KEYS
+          google-project-id: GOOGLE_PROJECT_ID
+          google-compute-zone: GOOGLE_COMPUTE_ZONE
+      - gcp-gcr/push-image:
+          google-project-id: GOOGLE_PROJECT_ID
+          registry-url: "eu.gcr.io"
+          image: $IMAGE_NAME
+      - cloudrun/deploy:
+          platform: "managed"
+          image: "us.gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME"
+          service-name: "orb-gcp-cloud-run"
+          region: $GOOGLE_COMPUTE_ZONE
+          unauthenticated: true
 workflows:
-  build_and_deploy_to_managed_workflow:
+  build_test_deploy:
     jobs:
-      - build_and_deploy
+      - build_test
+      - build_push_image_cloud_run_mangaged:
+          requires:
+            - build_test
