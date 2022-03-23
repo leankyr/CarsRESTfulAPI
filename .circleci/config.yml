@@ -25,12 +25,13 @@ jobs:
       - run:
           name: Build app binary and Docker image
           command: |
-            echo 'export PATH=~$PATH:~/.local/bin' >> $BASH_ENV
-            echo ${GCP_PROJECT_KEY} | base64 --decode --ignore-garbage > /home/leankyr/IdeaProjects/CarsAPI/sa-private-key.json
+#            echo 'export PATH=~$PATH:~/.local/bin' >> $BASH_ENV
+#            echo ${GCP_PROJECT_KEY} | base64 --decode --ignore-garbage > /home/leankyr/IdeaProjects/CarsAPI/sa-private-key.json
             echo 'export GOOGLE_CLOUD_KEYS=$(cat $HOME/IdeaProjects/CarsAPI/sa-private-key.json)' >> $BASH_ENV
-            echo 'export TAG=${CIRCLE_SHA1}' >> $BASH_ENV
-            echo 'export IMAGE_NAME=$CIRCLE_PROJECT_REPONAME' >> $BASH_ENV && source $BASH_ENV
-            docker build -t eu.gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME -t eu.gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME:$TAG .
+#            echo 'export TAG=${CIRCLE_SHA1}' >> $BASH_ENV
+#            echo 'export IMAGE_NAME=$CIRCLE_PROJECT_REPONAME' >> $BASH_ENV && source $BASH_ENV
+            docker build -t eu.gcr.io/cars-restful-api/node-app:latest .
+
       - gcp-gcr/gcr-auth:
           gcloud-service-key: GOOGLE_CLOUD_KEYS
           google-project-id: GOOGLE_PROJECT_ID
