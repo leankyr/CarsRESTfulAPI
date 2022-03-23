@@ -19,9 +19,7 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - build
             - package.json
-            - app.yaml
   deploy:
     docker:
       - image: google/cloud-sdk
