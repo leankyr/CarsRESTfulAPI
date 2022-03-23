@@ -16,7 +16,8 @@ jobs:
 #            npm test
   build_push_image_cloud_run_mangaged:
     docker:
-      - image: eu.gcr.io/cars-restful-api/node-app:latest
+      - image: cimg/node:16.13.2
+
     steps:
       - checkout
       - setup_remote_docker:
