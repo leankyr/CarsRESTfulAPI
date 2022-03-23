@@ -4,7 +4,6 @@ jobs:
     docker:
       - image: circleci/node:latest
     steps:
-      - checkout
       - run:
           name: Check Node.js version
           command: node -v
