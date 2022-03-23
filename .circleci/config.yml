@@ -1,55 +1,57 @@
 version: 2.1
-orbs:
-  gcp-gcr: circleci/gcp-gcr@0.6.1
-  cloudrun: circleci/gcp-cloud-run@1.0.0
 jobs:
-  build_test:
+  build:
     docker:
-      - image: eu.gcr.io/cars-restful-api/node-app:latest
+      - image: circleci/node:latest
     steps:
       - checkout
       - run:
-          name: Install Dependencies
-          command: |
-            npm install
+          name: Check Node.js version
+          command: node -v
       - run:
-          name: Run Tests
-          command: |
-            npm test
-  build_push_image_cloud_run_mangaged:
+          name: Install dependencies
+          command: npm install
+      - run:
+      name: Run tests
+      command: npm test
+      - run:
+          name: Lint
+          command: npx eslint src/**
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build
+            - package.json
+            - yarn.lock
+            - app.yaml
+  deploy:
     docker:
-      - image: eu.gcr.io/cars-restful-api/node-app:latest
+      - image: google/cloud-sdk
     steps:
-      - checkout
-      - setup_remote_docker:
-          docker_layer_caching: false
+      - attach_workspace:
+          at: .
       - run:
-          name: Build app binary and Docker image
+          name: ls
+          command: ls -al
+      - run:
+          name: Setup gcloud env
           command: |
-            echo 'export PATH=~$PATH:~/.local/bin' >> $BASH_ENV
-            echo ${GCP_PROJECT_KEY} | base64 --decode --ignore-garbage > $HOME/CarsAPI/sa-private-key.json
-            echo 'export GOOGLE_CLOUD_KEYS=$(cat $HOME/CarsAPI/sa-private-key.json)' >> $BASH_ENV
-            echo 'export TAG=${CIRCLE_SHA1}' >> $BASH_ENV
-            echo 'export IMAGE_NAME=$CIRCLE_PROJECT_REPONAME' >> $BASH_ENV && source $BASH_ENV
-            docker build -t eu.gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME -t eu.gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME:$TAG .
-      - gcp-gcr/gcr-auth:
-          gcloud-service-key: GOOGLE_CLOUD_KEYS
-          google-project-id: GOOGLE_PROJECT_ID
-          google-compute-zone: GOOGLE_COMPUTE_ZONE
-      - gcp-gcr/push-image:
-          google-project-id: GOOGLE_PROJECT_ID
-          registry-url: "eu.gcr.io"
-          image: $IMAGE_NAME
-      - cloudrun/deploy:
-          platform: "managed"
-          image: "us.gcr.io/$GOOGLE_PROJECT_ID/$IMAGE_NAME"
-          service-name: "orb-gcp-cloud-run"
-          region: $GOOGLE_COMPUTE_ZONE
-          unauthenticated: true
+            echo $GCP_KEY > sa-private-key.json
+            gcloud auth activate-service-account --key-file=sa-private-key.json
+            gcloud --quiet config set project ${GCP_PROJECT_ID}
+            gcloud --quiet config set compute/zone ${GCP_REGION}
+      - run:
+          name: Deploy to App Engine
+          command: gcloud app deploy
+
 workflows:
-  build_test_deploy:
+  version: 2
+  build-deploy:
     jobs:
-      - build_test
-      - build_push_image_cloud_run_mangaged:
+      - build
+      - deploy:
           requires:
-            - build_test
+            - build
+          filters:
+            branches:
+              only: master
