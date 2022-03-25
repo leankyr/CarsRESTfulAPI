@@ -34,8 +34,3 @@ workflows:
     jobs:
       - deploy_db
       - deploy_node
-      requires:
-        - deploy_db
-#      - push_image_to_gcp_and_deploy_cloud_run:
-#          requires:
-#            - build_test
