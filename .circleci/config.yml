@@ -22,8 +22,7 @@ jobs:
       /usr/src/app
     steps:
       - checkout
-      - run:
-          command: npm install
+      - run: npm install
       - run: npm ci
       - run: npm run test:ci
       unauthenticated: true
