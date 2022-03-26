@@ -27,6 +27,7 @@ jobs:
             npm install
       - run:
           command: |
+            ss -lptn 'sport = :5432'
             npm test
           unauthenticated: true
 workflows:
