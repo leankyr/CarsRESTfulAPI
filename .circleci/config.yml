@@ -23,12 +23,9 @@ jobs:
     steps:
       - checkout
       - run:
-          command: |
-            npm install
-      - run:
-          command: |
-            ss -lptn 'sport = :5432'
-            npm test
+          command: npm install
+      - run: npm ci
+      - run: npm run test:ci
           unauthenticated: true
 workflows:
   build_test_deploy:
