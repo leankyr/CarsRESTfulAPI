@@ -30,7 +30,7 @@ jobs:
             npm ci
       - run:
           command: |
-            npm run test:ci
+            npm run test
 workflows:
   build_test_deploy:
     jobs:
