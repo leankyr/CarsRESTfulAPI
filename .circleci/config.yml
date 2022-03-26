@@ -26,7 +26,7 @@ jobs:
           command: npm install
       - run: npm ci
       - run: npm run test:ci
-          unauthenticated: true
+      unauthenticated: true
 workflows:
   build_test_deploy:
     jobs:
