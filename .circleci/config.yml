@@ -22,10 +22,15 @@ jobs:
       /usr/src/app
     steps:
       - checkout
-      - run: npm install
-      - run: npm ci
-      - run: npm run test:ci
-      unauthenticated: true
+      - run:
+          command: |
+            npm install
+      - run:
+          command: |
+            npm ci
+      - run:
+          command: |
+            npm run test:ci
 workflows:
   build_test_deploy:
     jobs:
