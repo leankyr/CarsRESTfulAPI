@@ -18,6 +18,13 @@ jobs:
   deploy_node:
     docker:
       - image: node:16.13.2
+    environment:
+      HOST: "127.0.0.1"
+      DB_PORT: 5432
+      USER: "leankyr"
+      PASS: "lalala"
+      DB: "CarsDB"
+      SERVER: "http://localhost:3000"
     working_directory:
       /usr/src/app
     steps:
