@@ -33,9 +33,8 @@ jobs:
           command: npm install
       - run:
           command: |
-           apt update
-           apt -y install postgresql postgresql-contrib &&
-           systemctl start postgresql.service
+           apt update &&
+           apt -y install postgresql postgresql-contrib
       - run:
           command: |
             pg_ctlcluster 11 main start
