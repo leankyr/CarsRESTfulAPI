@@ -34,6 +34,9 @@ jobs:
             npm install
       - run:
           command: |
+            chmod +x ./database/migrations/01-init.sh
+      - run:
+          command: |
             sh ./database/migrations/01-init.sh
       - run:
           command: |
