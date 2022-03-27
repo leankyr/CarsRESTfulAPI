@@ -5,8 +5,19 @@ orbs:
 jobs:
   build:
     docker:
-      - image: cimg/postgres:12.8
-      - image: cimg/node:16.14.2
+      - image: cimg/postgres:12.8.0
+    steps:
+      - checkout
+    environment:
+      POSTGRES_USER: leankyr
+      POSTGRES_PASSWORD: lalala
+      POSTGRES_DB: CarsDB
+      APP_DB_USER: leankyr
+      APP_DB_PASS: lalala
+      APP_DB_NAME: CarsDB
+  deploy_node:
+    docker:
+      - image: cimg/node:16.13.2
     environment:
       HOST: "127.0.0.1"
       DB_PORT: 5432
@@ -36,4 +47,5 @@ jobs:
 workflows:
   build_test_deploy:
     jobs:
-      - build
+      - deploy_db
+      - deploy_node
