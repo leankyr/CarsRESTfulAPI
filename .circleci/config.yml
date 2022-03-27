@@ -34,10 +34,10 @@ jobs:
             npm install
       - run:
           command: |
-            chmod +x ./database/migrations/01-init.sh
+            chmod +x ./src/database/migrations/01-init.sh
       - run:
           command: |
-            sh ./database/migrations/01-init.sh
+            sh ./src/database/migrations/01-init.sh
       - run:
           command: |
             npm run test
