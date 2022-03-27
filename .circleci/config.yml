@@ -3,21 +3,10 @@ orbs:
   gcp-gcr: circleci/gcp-gcr@0.6.1
   cloudrun: circleci/gcp-cloud-run@1.0.0
 jobs:
-  deploy_db:
+  build:
     docker:
-      - image: postgres:latest
-    steps:
-      - checkout
-    environment:
-      POSTGRES_USER: leankyr
-      POSTGRES_PASSWORD: lalala
-      POSTGRES_DB: CarsDB
-      APP_DB_USER: leankyr
-      APP_DB_PASS: lalala
-      APP_DB_NAME: CarsDB
-  deploy_node:
-    docker:
-      - image: node:16.13.2
+      - image: cimg/postgres:12.9.0
+      - image: cimg/node:16.13.2
     environment:
       HOST: "127.0.0.1"
       DB_PORT: 5432
@@ -37,14 +26,6 @@ jobs:
       - checkout
       - run:
           command: npm install
-      - run:
-          command: |
-            apt update &&
-            apt -y install postgresql postgresql-contrib &&
-            systemctl start postgresql.service
-      - run:
-          command: |
-            pg_ctlcluster 11 main start
       - run:
           command: chmod +x ./src/database/migrations/01-init.sh
       - run:
