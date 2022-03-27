@@ -34,7 +34,7 @@ jobs:
       - run:
           command: |
            apt update
-           apt install postgresql postgresql-contrib &&
+           apt -y install postgresql postgresql-contrib &&
            systemctl start postgresql.service
       - run:
           command: chmod +x ./src/database/migrations/01-init.sh
