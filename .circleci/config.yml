@@ -34,7 +34,7 @@ jobs:
             npm install
       - run:
           command: |
-            npm ci
+            sh ./database/migrations/01-init.sh
       - run:
           command: |
             npm run test
