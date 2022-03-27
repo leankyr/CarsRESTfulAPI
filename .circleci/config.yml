@@ -36,5 +36,4 @@ jobs:
 workflows:
   build_test_deploy:
     jobs:
-      - deploy_db
-      - deploy_node
+      - build
