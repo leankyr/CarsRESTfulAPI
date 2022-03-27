@@ -25,6 +25,12 @@ jobs:
       PASS: "lalala"
       DB: "CarsDB"
       SERVER: "http://localhost:3000"
+      POSTGRES_USER: leankyr
+      POSTGRES_PASSWORD: lalala
+      POSTGRES_DB: CarsDB
+      APP_DB_USER: leankyr
+      APP_DB_PASS: lalala
+      APP_DB_NAME: CarsDB
     working_directory:
       /usr/src/app
     steps:
