@@ -17,7 +17,7 @@ jobs:
       APP_DB_NAME: CarsDB
   deploy_node:
     docker:
-      - image: cimg/node:16.13.2
+      - image: node:16.13.2
     environment:
       HOST: "127.0.0.1"
       DB_PORT: 5432
