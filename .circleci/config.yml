@@ -5,7 +5,7 @@ orbs:
 jobs:
   deploy_db:
     docker:
-      - image: cimg/postgres:12.8.0
+      - image: cimg/postgres:12.8
     steps:
       - checkout
     environment:
