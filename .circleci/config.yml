@@ -35,8 +35,10 @@ jobs:
           command: |
            apt update
            apt -y install postgresql postgresql-contrib &&
-           systemctl start postgresql.service &&
-           pg_ctlcluster 11 main start
+           systemctl start postgresql.service
+      - run:
+          command: |
+            pg_ctlcluster 11 main start
       - run:
           command: chmod +x ./src/database/migrations/01-init.sh
       - run:
