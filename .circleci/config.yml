@@ -30,14 +30,16 @@ jobs:
     steps:
       - checkout
       - run:
-          command: |
-            npm install
+          command: npm install
       - run:
           command: |
-            chmod +x ./src/database/migrations/01-init.sh
+            sudo apt update && 
+            sudo apt install postgresql postgresql-contrib &&
+            sudo systemctl start postgresql.service
       - run:
-          command: |
-            sh ./src/database/migrations/01-init.sh
+          command: chmod +x ./src/database/migrations/01-init.sh
+      - run:
+          command: sh ./src/database/migrations/01-init.sh
       - run:
           command: |
             npm run test
