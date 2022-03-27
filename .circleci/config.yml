@@ -33,9 +33,7 @@ jobs:
           command: npm install
       - run:
           command: |
-           sudo apt update
-#           sudo apt install postgresql postgresql-contrib &&
-#           sudo systemctl start postgresql.service
+            sudo pip install postgressql
       - run:
           command: chmod +x ./src/database/migrations/01-init.sh
       - run:
