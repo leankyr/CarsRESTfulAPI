@@ -1,6 +1,28 @@
 version: 2.1
 jobs:
-  build:
+  build_db:
+    docker:
+      - image: cimg/postgres:12.8
+    steps:
+      - checkout
+      - run: sudo apt-get update
+      - run: sudo apt-get install postgresql-client
+      - run: whoami
+      - run:
+          name: Make file executable
+          command: chmod +x ./src/database/migrations/02-init.sh
+      - run:
+          name: Create DB
+          command: sh ./src/database/migrations/02-init.sh
+    environment:
+      TEST_DATABASE_URL: postgresql://postgres@localhost/CarsDB
+      POSTGRES_USER: leankyr
+      POSTGRES_PASSWORD: lalala
+      POSTGRES_DB: CarsDB
+      APP_DB_USER: leankyr
+      APP_DB_PASS: lalala
+      APP_DB_NAME: CarsDB
+  build_node:
 #    working_directory: /usr/src/app/
     docker: # run the steps with Docker
       - image: cimg/node:16.13.2
@@ -11,32 +33,39 @@ jobs:
       PASS: "lalala"
       DB: "CarsDB"
       SERVER: "http://localhost:3000"
-      POSTGRES_USER: postgres
+      POSTGRES_USER: leankyr
       POSTGRES_PASSWORD: lalala
-      POSTGRES_DB: postgres
-      APP_DB_USER: postgres
+      POSTGRES_DB: CarsDB
+      APP_DB_USER: leankyr
       APP_DB_PASS: lalala
-      APP_DB_NAME: postgres
+      APP_DB_NAME: CarsDB
     steps: # a collection of executable commands
       - checkout
       - run:
           name: Install project dependencies
           command: npm install
-      - run:
-          name: Update Repos
-          command: sudo apt update
-      - run:
-          name: Install Postgres
-          command: sudo apt -y install postgresql-12
-      - run:
-          name: Restart Postgres Service
-          command: sudo /etc/init.d/postgresql restart
-      - run:
-          name: Make file executable
-          command: chmod +x ./src/database/migrations/02-init.sh
-      - run:
-          name: Create DB
-          command: sh ./src/database/migrations/02-init.sh
+#      - run:
+#          name: Update Repos
+#          command: sudo apt update
+#      - run:
+#          name: Install Postgres
+#          command: sudo apt -y install postgresql-12
+#      - run:
+#          name: Restart Postgres Service
+#          command: sudo /etc/init.d/postgresql restart
+#      - run:
+#          name: Make file executable
+#          command: chmod +x ./src/database/migrations/02-init.sh
+#      - run:
+#          name: Create DB
+#          command: sh ./src/database/migrations/02-init.sh
       - run:
           name: Run tests
           command: npm test
+workflows:
+  build_test_deploy:
+    jobs:
+      - build_db
+      - build_node:
+          requires:
+            - build_db
