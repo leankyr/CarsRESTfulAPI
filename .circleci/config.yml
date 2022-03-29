@@ -31,8 +31,8 @@ jobs:
       APP_DB_USER: leankyr
       APP_DB_PASS: lalala
       APP_DB_NAME: CarsDB
-    working_directory:
-      /usr/src/app
+#    working_directory:
+#      /usr/src/app
     steps:
       - checkout
       - run:
