@@ -1,22 +1,8 @@
 version: 2.1
-orbs:
-  gcp-gcr: circleci/gcp-gcr@0.6.1
-  cloudrun: circleci/gcp-cloud-run@1.0.0
 jobs:
-  deploy_db:
-    docker:
-      - image: cimg/postgres:12.8
-    steps:
-      - checkout
-    environment:
-      POSTGRES_USER: leankyr
-      POSTGRES_PASSWORD: lalala
-      POSTGRES_DB: CarsDB
-      APP_DB_USER: leankyr
-      APP_DB_PASS: lalala
-      APP_DB_NAME: CarsDB
-  deploy_node:
-    docker:
+  build:
+    working_directory: /usr/src/app/
+    docker: # run the steps with Docker
       - image: cimg/node:16.13.2
     environment:
       HOST: "127.0.0.1"
@@ -31,21 +17,17 @@ jobs:
       APP_DB_USER: leankyr
       APP_DB_PASS: lalala
       APP_DB_NAME: CarsDB
-#    working_directory:
-#      /usr/src/app
-    steps:
+    steps: # a collection of executable commands
       - checkout
       - run:
+          name: Install project dependencies
           command: npm install
       - run:
-          command: chmod +x ./src/database/migrations/01-init.sh
+          name: Install Postgres
+          command: apt update && sudo apt-get -y install postgresql-12
       - run:
-          command: sh ./src/database/migrations/01-init.sh
+          name: Create DB
+          command: chmod +x ./src/database/migrations/01-init.sh && sh ./src/database/migrations/01-init.sh
       - run:
-          command: |
-            npm run test
-workflows:
-  build_test_deploy:
-    jobs:
-      - deploy_db
-      - deploy_node
+          name: Run tests
+          command: npm test
