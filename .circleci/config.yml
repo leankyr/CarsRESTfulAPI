@@ -10,7 +10,7 @@ jobs:
       - run: whoami
       - run:
           name: Restart Postgres Service
-          command: sudo /etc/init.d/postgresql restart
+          command: sudo service postgresql restart
       - run:
           name: Make file executable
           command: chmod +x ./src/database/migrations/02-init.sh
