@@ -24,7 +24,7 @@ jobs:
           command: npm install
       - run:
           name: Install Postgres
-          command: apt update && sudo apt-get -y install postgresql-12
+          command: apt update && apt-get -y install postgresql-12
       - run:
           name: Create DB
           command: chmod +x ./src/database/migrations/01-init.sh && sh ./src/database/migrations/01-init.sh
