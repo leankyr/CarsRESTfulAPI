@@ -11,9 +11,9 @@ jobs:
       PASS: "lalala"
       DB: "CarsDB"
       SERVER: "http://localhost:3000"
-      POSTGRES_USER: leankyr
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: lalala
-      POSTGRES_DB: CarsDB
+      POSTGRES_DB: postgres
       APP_DB_USER: postgres
       APP_DB_PASS: lalala
       APP_DB_NAME: postgres
@@ -34,6 +34,9 @@ jobs:
       - run:
           name: Make file executable
           command: chmod +x ./src/database/migrations/02-init.sh
+      - run:
+          name: Export Roles
+          command:
       - run:
           name: Create DB
           command: sh ./src/database/migrations/02-init.sh
