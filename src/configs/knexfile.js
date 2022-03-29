@@ -4,7 +4,7 @@ const path = require('path');
  * @type {string|string}
  */
 
-// const dbSocketPath = process.env.DB_SOCKET_PATH || '/cloudsql';
+//const dbSocketPath = process.env.DB_SOCKET_PATH || '/cloudsql';
 
 module.exports = {
 

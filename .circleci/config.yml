@@ -33,10 +33,10 @@ jobs:
           command: sudo /etc/init.d/postgresql restart
       - run:
           name: Make file executable
-          command: chmod +x ./src/database/migrations/01-init.sh
+          command: chmod +x ./src/database/migrations/02-init.sh
       - run:
           name: Create DB
-          command: sh ./src/database/migrations/01-init.sh
+          command: sh ./src/database/migrations/02-init.sh
       - run:
           name: Run tests
           command: npm test
