@@ -29,6 +29,9 @@ jobs:
           name: Install Postgres
           command: sudo apt -y install postgresql-12
       - run:
+          name: Restart Postgres Service
+          command: sudo /etc/init.d/postgresql restart
+      - run:
           name: Make file executable
           command: chmod +x ./src/database/migrations/01-init.sh
       - run:
