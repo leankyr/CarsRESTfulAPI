@@ -14,9 +14,9 @@ jobs:
       POSTGRES_USER: leankyr
       POSTGRES_PASSWORD: lalala
       POSTGRES_DB: CarsDB
-      APP_DB_USER: leankyr
+      APP_DB_USER: postgres
       APP_DB_PASS: lalala
-      APP_DB_NAME: CarsDB
+      APP_DB_NAME: postgres
     steps: # a collection of executable commands
       - checkout
       - run:
