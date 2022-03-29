@@ -24,10 +24,10 @@ jobs:
           command: npm install
       - run:
           name: Update Repos
-          command: apt update
+          command: sudo apt update
       - run:
           name: Install Postgres
-          command: apt -y install postgresql
+          command: sudo apt -y install postgresql
       - run:
           name: Create DB
           command: chmod +x ./src/database/migrations/01-init.sh && sh ./src/database/migrations/01-init.sh
