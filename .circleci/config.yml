@@ -35,9 +35,6 @@ jobs:
           name: Make file executable
           command: chmod +x ./src/database/migrations/02-init.sh
       - run:
-          name: Export Roles
-          command:
-      - run:
           name: Create DB
           command: sh ./src/database/migrations/02-init.sh
       - run:
