@@ -9,6 +9,9 @@ jobs:
       - run: sudo apt-get install postgresql-client
       - run: whoami
       - run:
+          name: Restart Postgres Service
+          command: sudo /etc/init.d/postgresql restart
+      - run:
           name: Make file executable
           command: chmod +x ./src/database/migrations/02-init.sh
       - run:
