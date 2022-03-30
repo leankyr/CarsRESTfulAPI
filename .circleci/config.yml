@@ -8,12 +8,12 @@ jobs:
       - run: sudo apt update
       - run: sudo apt upgrade
       - run: sudo apt install -y curl
-      - run:  apt-get update && \
-              apt-get install -y curl apt-transport-https ca-certificates software-properties-common && \
+      - run:  apt update && \
+              apt install -y curl apt-transport-https ca-certificates software-properties-common && \
               curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
               add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable" && \
               apt-cache policy docker-ce && \
-              apt-get update && apt-get install -y docker-ce
+              apt update && apt install -y docker-ce
       - run: sudo chmod +x /usr/local/bin/docker-compose
       - run: sudo service docker start
       - run: docker-compose up
