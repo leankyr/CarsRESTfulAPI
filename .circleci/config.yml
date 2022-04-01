@@ -50,3 +50,5 @@ workflows:
     jobs:
       - deploy_db
       - deploy_node
+      requires:
+        - deploy_db
