@@ -42,6 +42,8 @@ jobs:
       - run:
           command: chmod +x ./src/database/migrations/02-init.sh
       - run:
+          command: sudo systemctl start postgresql
+      - run:
           command: sh ./src/database/migrations/02-init.sh
       - run:
           command: |
