@@ -12,7 +12,7 @@ jobs:
           POSTGRES_DB: CarsDB
     steps:
       - checkout
-
+    environment:
       APP_DB_USER: leankyr
       APP_DB_PASS: lalala
       APP_DB_NAME: CarsDB
