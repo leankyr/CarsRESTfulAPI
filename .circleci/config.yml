@@ -46,9 +46,9 @@ jobs:
       - run:
           command: npm run test
 workflows:
-  build_test_deploy:
+  deploy-step-workflow:
     jobs:
       - deploy_db
-      - deploy_node
-      requires:
-        - deploy_db
+      - deploy_node:
+          requires:
+            - deploy_db
